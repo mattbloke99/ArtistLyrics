@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,14 +13,14 @@ namespace ArtistLyrics.Core.Services
 
         public MusicBrainzService(IRestClient client, ILogger<MusicBrainzService> logger) : base(client)
         {
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<Artist> GetArtistByNameAsync(string artistName)
         {
             var request = new RestRequest($"/ws/2/artist?limit=1&query={artistName}&fmt=json", Method.GET);
 
-            MusicBrainArtistsResponse musicBrainArtistsResponse = (await _client.ExecuteAsync<MusicBrainArtistsResponse>(request)).Data;
+            MusicBrainzArtistsResponse musicBrainArtistsResponse = (await _client.ExecuteAsync<MusicBrainzArtistsResponse>(request)).Data;
 
             //Assuming we're only interested in the first artist
             var artist = musicBrainArtistsResponse.Artists.FirstOrDefault();
@@ -34,7 +35,7 @@ namespace ArtistLyrics.Core.Services
             //Assuming only 10 songs
             var request = new RestRequest($"/ws/2/work/?limit=10&artist={id}&fmt=json", Method.GET);
 
-            MusicBrainArtistWorks musicBrainArtistsResponse = (await _client.ExecuteAsync<MusicBrainArtistWorks>(request)).Data;
+            MusicBrainzArtistWorks musicBrainArtistsResponse = (await _client.ExecuteAsync<MusicBrainzArtistWorks>(request)).Data;
 
             var songs = musicBrainArtistsResponse.Works;
 

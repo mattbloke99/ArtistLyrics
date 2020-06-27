@@ -11,9 +11,15 @@ namespace ArtistLyrics.Core
 
         public decimal AverageWordCount()
         {
+            if (Songs == null || !Songs.Any())
+            {
+                return 0;
+
+            }
             var totalWords = (decimal)Songs.Sum(o => o.LyricCount());
 
             return totalWords / Songs.Count();
+
         }
     }
 }

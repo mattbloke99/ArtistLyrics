@@ -10,7 +10,7 @@ namespace ArtistLyrics.Core
 
         public int LyricCount()
         {
-            string[] splitStrings = { " ", "\n" };
+            string[] splitStrings = { " ", "\n", "\r" };
 
             var words = Lyrics?.Split(splitStrings, StringSplitOptions.RemoveEmptyEntries);
 

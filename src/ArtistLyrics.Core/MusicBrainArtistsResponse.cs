@@ -2,7 +2,7 @@
 
 namespace ArtistLyrics.Core
 {
-    public class MusicBrainArtistsResponse
+    public class MusicBrainzArtistsResponse
     {
         public IEnumerable<Artist> Artists { get; set; }
 

@@ -6,6 +6,7 @@ using RestSharp;
 using Serilog;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ArtistLyrics
@@ -40,15 +41,19 @@ namespace ArtistLyrics
         [Required]
         public string ArtistName { get; }
 
-        private async Task OnExecute()
+        public async Task OnExecute()
         {
             try
             {
-                var musicBrainzService = GetMusicBrainzSerrvice();
+                var musicBrainzService = GetMusicBrainzService();
 
                 var artist = await musicBrainzService.GetArtistByNameAsync(ArtistName);
 
+                Console.WriteLine($"Found artist: {artist.Name}");
+
                 artist.Songs = await musicBrainzService.GetSongsByIdAsync(artist.Id);
+
+                Console.WriteLine($"Found {artist.Songs.Count()} songs for artist {artist.Name}");
 
                 var lyricService = GetLyricService();
 
@@ -57,9 +62,11 @@ namespace ArtistLyrics
                     song.Lyrics = await lyricService.GetLyricsAsync(ArtistName, song.Title);
 
                     Log.Debug("{@song}", song);
+
+                    Console.WriteLine($"Found lyrics with {song.LyricCount()} words for song {song.Title}");
                 }
 
-                Console.WriteLine($"Average words per song for {ArtistName} is {artist.AverageWordCount()}");
+                Console.WriteLine($"Average words per song for {artist.Name} is {artist.AverageWordCount()}");
             }
             catch (Exception ex)
             {
@@ -77,7 +84,7 @@ namespace ArtistLyrics
             return _serviceProvider.GetService<LyricsService>();
         }
 
-        private MusicBrainzService GetMusicBrainzSerrvice()
+        private MusicBrainzService GetMusicBrainzService()
         {
             var client = _serviceProvider.GetService<IRestClient>();
 

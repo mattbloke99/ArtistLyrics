@@ -5,9 +5,9 @@ namespace ArtistLyrics.Core.Tests
     public class SongTests
     {
         [Fact]
-        public void SongLyricCountTest()
+        public void SongWordCountTest()
         {
-            var song = new Song { Title = "Radio Gaga", Lyrics = "I'd sit alone and watch your light \n My only friend through teenage nights" };
+            var song = new Song { Title = "Radio Gaga", Lyrics = "I'd sit alone and watch your light\r\nMy only friend through teenage nights" };
 
             var lyricTotal = song.LyricCount();
 
@@ -15,22 +15,7 @@ namespace ArtistLyrics.Core.Tests
         }
 
         [Fact]
-        public void ArtistAverageLyricCountTest()
-        {
-            var song = new Song { Title = "Radio Gaga", Lyrics = "I'd sit alone and watch your light \n\n\n\n My only friend through teenage nights" };
-            var song2 = new Song { Title = "Radio Gaga", Lyrics = "I've paid my dues\nTime after time\r\nI've done my" };
-
-            Song[] songs = { song, song2 };
-
-            var artist = new Artist { Songs = songs };
-
-            var averageLyricCount = artist.AverageWordCount();
-
-            Assert.Equal(11.5m, averageLyricCount);
-        }
-
-        [Fact]
-        public void SongLyricCountNoLyricsTest()
+        public void SongWordCountNoLyricsTest()
         {
             var song = new Song { Title = "Moonlight Sonata" };
 
