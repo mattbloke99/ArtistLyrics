@@ -9,7 +9,7 @@ namespace ArtistLyrics.Core.Services
         public RestApiService(IRestClient client)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
-            _client.UserAgent = "ApiCaller/1.0 (kaser47@hotmail.com)";
+            _client.UserAgent = "ArtistLyrics/1.0 (githuba@webfusiontechnology.co.uk)";
         }
     }
 }

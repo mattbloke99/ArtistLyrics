@@ -24,7 +24,7 @@ namespace ArtistLyrics.Core.Tests
 
             var artist = new Artist { Songs = songs };
 
-            var averageLyricCount = artist.AverageLyricCount();
+            var averageLyricCount = artist.AverageWordCount();
 
             Assert.Equal(11.5m, averageLyricCount);
         }

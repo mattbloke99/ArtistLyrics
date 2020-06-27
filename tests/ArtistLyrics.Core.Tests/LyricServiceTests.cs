@@ -2,6 +2,7 @@ using ArtistLyrics.Core.Services;
 using RestSharp;
 using Xunit;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace ArtistLyrics.Core.Tests
 {
@@ -15,7 +16,7 @@ namespace ArtistLyrics.Core.Tests
 
             var client = new RestClient("https://api.lyrics.ovh");
 
-            var musicBrainzService = new LyricsService(client);
+            var musicBrainzService = new LyricsService(client, new NullLogger<LyricsService>());
 
             string lyrics = await musicBrainzService.GetLyricsAsync(artistName, songTitle);
 

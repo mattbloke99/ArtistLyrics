@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace ArtistLyrics.Core.Tests
 {
@@ -16,7 +17,7 @@ namespace ArtistLyrics.Core.Tests
 
             var client = new RestClient("https://musicbrainz.org");
 
-            var musicBrainzService = new MusicBrainzService(client);
+            var musicBrainzService = new MusicBrainzService(client, new NullLogger<MusicBrainzService>());
 
             Artist artist = await musicBrainzService.GetArtistByNameAsync(artistName);
 
@@ -31,7 +32,7 @@ namespace ArtistLyrics.Core.Tests
 
             var client = new RestClient("https://musicbrainz.org");
 
-            var musicBrainzService = new MusicBrainzService(client);
+            var musicBrainzService = new MusicBrainzService(client, new NullLogger<MusicBrainzService>());
 
             IEnumerable<Song> songs = await musicBrainzService.GetSongsByIdAsync(id);
 

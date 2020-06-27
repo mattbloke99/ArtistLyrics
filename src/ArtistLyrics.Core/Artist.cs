@@ -9,11 +9,11 @@ namespace ArtistLyrics.Core
         public string Name { get; set; }
         public IEnumerable<Song> Songs { get; set; }
 
-        public decimal AverageLyricCount()
+        public decimal AverageWordCount()
         {
-            var lyricSum = (decimal)Songs.Sum(o => o.LyricCount());
+            var totalWords = (decimal)Songs.Sum(o => o.LyricCount());
 
-            return lyricSum / Songs.Count();
+            return totalWords / Songs.Count();
         }
     }
 }

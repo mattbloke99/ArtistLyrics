@@ -2,7 +2,6 @@
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using RestSharp;
 using Serilog;
 using System;
@@ -20,8 +19,6 @@ namespace ArtistLyrics
 
         static int Main(string[] args)
         {
-            args = new[] { "-a Queen" };
-
             var serviceCollection = new ServiceCollection();
 
             _configuration = new ConfigurationBuilder()
@@ -29,7 +26,7 @@ namespace ArtistLyrics
                 .Build();
 
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
+                .ReadFrom.Configuration(_configuration)
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
                 .CreateLogger();
@@ -45,22 +42,30 @@ namespace ArtistLyrics
 
         private async Task OnExecute()
         {
-            var musicBrainzService = GetMusicBrainzSerrvice();
-
-            var artist = await musicBrainzService.GetArtistByNameAsync(ArtistName);
-
-            artist.Songs = await  musicBrainzService.GetSongsByIdAsync(artist.Id);
-
-            var lyricService = GetLyricService();
-
-            foreach (var song in artist.Songs)
+            try
             {
-                song.Lyrics = await lyricService.GetLyricsAsync(ArtistName, song.Title);
+                var musicBrainzService = GetMusicBrainzSerrvice();
 
-                Log.Debug("{@song}", song);
+                var artist = await musicBrainzService.GetArtistByNameAsync(ArtistName);
+
+                artist.Songs = await musicBrainzService.GetSongsByIdAsync(artist.Id);
+
+                var lyricService = GetLyricService();
+
+                foreach (var song in artist.Songs)
+                {
+                    song.Lyrics = await lyricService.GetLyricsAsync(ArtistName, song.Title);
+
+                    Log.Debug("{@song}", song);
+                }
+
+                Console.WriteLine($"Average words per song for {ArtistName} is {artist.AverageWordCount()}");
             }
-
-            Console.WriteLine($"Average lyrics per song for {ArtistName} is {artist.AverageLyricCount()}");
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                throw;
+            }
         }
 
         private LyricsService GetLyricService()
@@ -85,7 +90,6 @@ namespace ArtistLyrics
         {
             _serviceProvider = services
                 .AddLogging(configure => configure.AddSerilog())
-                .Configure<LoggerFilterOptions>(options => options.MinLevel = LogLevel.Debug)
                 .AddSingleton<IRestClient, RestClient>()
                 .AddSingleton<LyricsService, LyricsService>()
                 .AddSingleton<MusicBrainzService, MusicBrainzService>()
