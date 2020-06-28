@@ -7,6 +7,7 @@
 From the commandline
 
 > dotnet restore
+
 > dotnet build 
 
 
@@ -17,6 +18,7 @@ From the commandline
 >
 > Options:
 >   -?                              Show help information
+
 >   -a|--artist-name <ARTIST_NAME>  Artist Name`
 
 eg 
