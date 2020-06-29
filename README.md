@@ -32,19 +32,19 @@ The lyrics are only taken from the first 10 songs found. Only one artist can be 
 
 ## Notes
 
-I have created three projects within the solution.
-ArtistLyrics.Core which contains the core functionality.
-ArtistLyrics.Core.Tests for integration and unit tests for the core project.
-ArtistLyrics which is the console application and consumes the core project.
+I have created three projects within the solution.  
+ArtistLyrics.Core which contains the core functionality.  
+ArtistLyrics.Core.Tests for integration and unit tests for the core project.  
+ArtistLyrics which is the console application and consumes the core project.  
 
-The following packages have been utilised in the solution
-RestSharp - for connecting to REST endpoints and conversion of JSON into c# objects
-McMaster - for commandline argument parsing 
-Serilog - For logging
-XUnit - For testing
+The following packages have been utilised in the solution  
+RestSharp - for connecting to REST endpoints and conversion of JSON into c# objects  
+McMaster - for commandline argument parsing  
+Serilog - For logging  
+XUnit - For testing  
 
 ## Future releases
-Remove hard coding of UserAgent and put in settings
-Create Web front end
-Add tests for LyricsService and MusicBrainzService
-Setup CI pipeline to run tests etc
+Remove hard coding of UserAgent and put in settings  
+Create Web front end  
+Add tests for LyricsService and MusicBrainzService  
+Setup CI pipeline to run tests etc  
