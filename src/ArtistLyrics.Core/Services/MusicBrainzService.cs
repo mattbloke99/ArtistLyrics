@@ -20,30 +20,48 @@ namespace ArtistLyrics.Core.Services
         {
             var request = new RestRequest($"/ws/2/artist?limit=1&query={artistName}&fmt=json", Method.GET);
 
-            MusicBrainzArtistsResponse musicBrainArtistsResponse = (await _client.ExecuteAsync<MusicBrainzArtistsResponse>(request)).Data;
+            try
+            {
+                MusicBrainzArtistsResponse musicBrainArtistsResponse = (await _client.ExecuteAsync<MusicBrainzArtistsResponse>(request)).Data;
+                //Assuming we're only interested in the first artist
+                var artist = musicBrainArtistsResponse.Artists.FirstOrDefault();
 
-            //Assuming we're only interested in the first artist
-            var artist = musicBrainArtistsResponse.Artists.FirstOrDefault();
+                _logger.LogDebug("Found artist: {@artist}", artist);
 
-            _logger.LogDebug("Found artist: {@artist}", artist);
+                return artist;
+            }
 
-            return artist;
+            catch (Exception Ex)
+            {
+                _logger.LogError(Ex.Message, "An error was encountered whilst retreiving artist from MusicBrainz");
+                throw;
+            }
         }
 
         public async Task<IEnumerable<Song>> GetSongsByIdAsync(string id)
         {
-            //Assuming only 10 songs
-            var request = new RestRequest($"/ws/2/work/?limit=10&artist={id}&fmt=json", Method.GET);
+            try
+            {
+                //Assuming only 10 songs
+                var request = new RestRequest($"/ws/2/work/?limit=10&artist={id}&fmt=json", Method.GET);
 
-            MusicBrainzArtistWorks musicBrainArtistsResponse = (await _client.ExecuteAsync<MusicBrainzArtistWorks>(request)).Data;
+                MusicBrainzArtistWorks musicBrainArtistsResponse = (await _client.ExecuteAsync<MusicBrainzArtistWorks>(request)).Data;
 
-            var songs = musicBrainArtistsResponse.Works;
+                var songs = musicBrainArtistsResponse.Works;
 
-            var songTitles = songs.Select(o => o.Title);
+                var songTitles = songs.Select(o => o.Title);
 
-            _logger.LogDebug("Found songs: {songs}", string.Join(", ", songTitles));
+                _logger.LogDebug("Found songs: {songs}", string.Join(", ", songTitles));
 
-            return songs;
+                return songs;
+            }
+            catch (Exception Ex)
+            {
+                _logger.LogError(Ex.Message, "An error was encountered whilst retreiving songs from MusicBrainz");
+                throw;
+            }
+
+
         }
     }
 }

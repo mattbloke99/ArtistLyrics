@@ -15,12 +15,20 @@ namespace ArtistLyrics.Core.Services
         }
         public async Task<string> GetLyricsAsync(string artistName, string songTitle)
         {
-            var request = new RestRequest($"/v1/{artistName}/{songTitle}", Method.GET);
-            var response = (await _client.ExecuteAsync<LyricResponse>(request)).Data;
+            try
+            {
+                var request = new RestRequest($"/v1/{artistName}/{songTitle}", Method.GET);
+                var response = (await _client.ExecuteAsync<LyricResponse>(request)).Data;
 
-            _logger.LogDebug("Lyrics {Lyrics}", response.Lyrics);
+                _logger.LogDebug("Lyrics {Lyrics}", response.Lyrics);
 
-            return response.Lyrics;
+                return response.Lyrics;
+            }
+            catch (Exception Ex)
+            {
+                _logger.LogError(Ex.Message, "An error was encountered whilst retreiving Lyrics from Lyric API");
+                throw;
+            }
         }
     }
 }

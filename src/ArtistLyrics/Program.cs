@@ -26,6 +26,7 @@ namespace ArtistLyrics
                 .AddJsonFile("appsettings.json", true, true)
                 .Build();
 
+            //setting up logging
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(_configuration)
                 .Enrich.FromLogContext()
@@ -70,7 +71,7 @@ namespace ArtistLyrics
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message);
+                Log.Error(ex.Message, "An error was encountered whilst executing the application.");
                 throw;
             }
         }
@@ -95,6 +96,7 @@ namespace ArtistLyrics
 
         private static void ConfigureServices(IServiceCollection services)
         {
+            //settings up services for dependecy injection
             _serviceProvider = services
                 .AddLogging(configure => configure.AddSerilog())
                 .AddSingleton<IRestClient, RestClient>()

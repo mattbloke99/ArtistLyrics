@@ -23,7 +23,7 @@ From the commandline
 
 eg 
 
-> ArtistLyrics -a "Queen"
+> ArtistLyrics -a "Pink Floyd"
 
 ## Assumptions
 
@@ -43,3 +43,8 @@ McMaster - for commandline argument parsing
 Serilog - For logging
 XUnit - For testing
 
+## Future releases
+Remove hard coding of UserAgent and put in settings
+Create Web front end
+Add tests for LyricsService and MusicBrainzService
+Setup CI pipeline to run tests etc
